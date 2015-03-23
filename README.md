@@ -57,17 +57,17 @@ This is basically everything you need to know.
 
 ```twofold
 // file included.twofold
-function methodArgs(args) {
-  args.forEach(function(arg, i){
+def methodArgs(args) {
+  args.for_each_with_index(fun(arg, i){
     if (0!=i) {
         // use interpolation to preserve the whitespace
-        \#{', '}
+        \#{", "}
     }
     // use backslash to avoid linebreaks
         \#{arg}
   });
 }
-function showMethod(method) {
+def showMethod(method) {
         |function #{method.name}(#{methodArgs(method.args)}) {
         |  #{method.body}
         |}
@@ -78,13 +78,13 @@ function showMethod(method) {
 // file main.twofold
 #include "included.twofold"
         |function #{name}Class(#{methodArgs(args)}) {
-methods.forEach(function(method){
+methods.for_each_with_index(fun(method){
         =  showMethod(method)
 });
         |
         |  return {
-methods.forEach(function(method, i){
-        |    "#{method.name}": #{method.name}#{(i+1 < methods.length) ? ',' : ''}
+methods.for_each_with_index(fun(method, i){
+        |    "#{method.name}": #{method.name}#{(i+1 < methods.size) ? "," : ""}
 });
         |  };
         |}
