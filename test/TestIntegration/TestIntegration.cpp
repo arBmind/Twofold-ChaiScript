@@ -40,31 +40,32 @@ private Q_SLOTS:
 
 using namespace Twofold;
 
+Q_DECLARE_METATYPE(Engine::Context);
+
 void TestIntegration::testTarget_data()
 {
     QTest::addColumn< QString >( "templateText" );
     QTest::addColumn< QString >( "targetText" );
-    QTest::addColumn< QVariantHash >( "context" );
+    QTest::addColumn< Engine::Context >( "context" );
     QTest::addColumn< MessageCount >( "messageCount" );
 
     QObject* qObject = new QObject();
-
     qObject->setProperty( "boolValue", true );
     qObject->setProperty( "stringValue", "Text" );
     qObject->setProperty( "intValue", 1 );
 
-    QStringList qArray;
-    qArray.append( "value1" );
-    qArray.append( "value2" );
-    qArray.append( "value3" );
+    std::vector< chaiscript::Boxed_Value > qArray;
+    qArray.push_back( chaiscript::const_var(std::string("value1")) );
+    qArray.push_back( chaiscript::const_var(std::string("value2")) );
+    qArray.push_back( chaiscript::const_var(std::string("value3")) );
 
-    QVariantHash context;
+    Engine::Context context;
 
-    context.insert( "qObject", QVariant::fromValue(qObject) );
-    context.insert( "qArray", qArray );
-    context.insert( "boolValue", true );
-    context.insert( "stringValue", "Text" );
-    context.insert( "intValue", 2 );
+    context["qObject"] = chaiscript::const_var(qObject);
+    context["qArray"] = chaiscript::const_var(qArray);
+    context["boolValue"] = chaiscript::const_var(true);
+    context["stringValue"] = chaiscript::const_var(std::string("Text"));
+    context["intValue"] = chaiscript::const_var(2);
 
     QTest::newRow("empty") << "|" << "\n" << context << MessageCount();
     QTest::newRow("text") << " \t | \t Hello World \t " << " \t Hello World \t \n" << context << MessageCount();
@@ -137,7 +138,7 @@ void TestIntegration::testTarget()
 {
     QFETCH( QString, templateText );
     QFETCH( QString, targetText );
-    QFETCH( QVariantHash, context );
+    QFETCH( Engine::Context, context );
     QFETCH( MessageCount, messageCount );
 
     auto messageHandler = std::make_shared<FakeMessageHandler>();
@@ -206,7 +207,7 @@ void TestIntegration::testTargetSourceMap()
 
     Engine engine(std::make_shared<FakeMessageHandler>(),
                   std::make_shared<FakeTextLoader>(templateText));
-    QVariantHash context;
+    Engine::Context context;
     Target target = engine.execTemplateName("testTemplate", context);
 
     auto targetBegin = target.text.cbegin();

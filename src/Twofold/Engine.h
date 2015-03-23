@@ -23,6 +23,8 @@
 #include "Twofold/MessageHandler.h"
 #include "Twofold/TextLoader.h"
 
+#include "chaiscript/dispatchkit/boxed_value.hpp"
+
 #include <QVariantHash>
 #include <QString>
 #include <memory>
@@ -44,16 +46,19 @@ struct Target
 class Engine
 {
 public:
+    using Context = std::map<std::string, chaiscript::Boxed_Value>;
+
+public:
     Engine(MessageHandlerPtr messageHandler, TextLoaderPtr textLoader);
     Engine(TextLoaderPtr textLoader, MessageHandlerPtr messageHandler);
 
     void showTemplateSyntaxErrors(const PreparedTemplate &preparedTemplate) const;
 
-    Target exec(const PreparedTemplate &preparedTemplate, const QVariantHash &inputs);
+    Target exec(const PreparedTemplate &preparedTemplate, const Context &inputs);
 
     PreparedTemplate prepare(const QString &templateName) const;
 
-    Target execTemplateName(const QString &templateName, const QVariantHash &inputs);
+    Target execTemplateName(const QString &templateName, const Context &inputs);
 
 private:
     class Private;

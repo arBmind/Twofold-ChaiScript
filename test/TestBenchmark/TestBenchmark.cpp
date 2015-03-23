@@ -22,6 +22,8 @@
 #include <QString>
 #include <QtTest>
 
+#include <utility>
+
 class TestBenchmark : public QObject
 {
     Q_OBJECT
@@ -34,7 +36,7 @@ private Q_SLOTS:
     void execute();
 
 private:
-    QVariantHash context;
+    Twofold::Engine::Context context;
 };
 
 #include "TestBenchmark.moc"
@@ -55,7 +57,6 @@ def structFieldHeader(type) {
   |#{ type.name }
   |struct #{ type.name } {
   |};
-  ""
 }
 
 if (type.isArray == true) {
@@ -87,14 +88,14 @@ TestBenchmark::TestBenchmark()
     pType->setProperty( "isArray", true );
     pType->setProperty( "name", "TestArray" );
 
-    QStringList baseNames;
-    baseNames.append( "base1" );
-    baseNames.append( "base2" );
-    baseNames.append( "base3" );
+    std::vector< chaiscript::Boxed_Value > baseNames;
+    baseNames.push_back( chaiscript::const_var("base1") );
+    baseNames.push_back( chaiscript::const_var("base2") );
+    baseNames.push_back( chaiscript::const_var("base3") );
 
-    context.insert( "type", QVariant::fromValue(pType) );
-    context.insert( "baseNames", baseNames );
-    context.insert( "name", "Main" );
+    context.insert(std::make_pair("type", chaiscript::const_var(pType)));
+    context.insert(std::make_pair("baseNames", chaiscript::const_var(baseNames)));
+    context.insert(std::make_pair("name", chaiscript::const_var("Main")));
 }
 
 void TestBenchmark::prepare()

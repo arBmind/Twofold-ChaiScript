@@ -18,7 +18,7 @@
 CONFIG += staticlib
 TARGET = Twofold
 
-win32-msvc:QMAKE_CXXFLAGS += /bigobj
+win32-msvc2013:QMAKE_CXXFLAGS += /bigobj
 
 SOURCES += \
     Twofold/Engine.cpp \

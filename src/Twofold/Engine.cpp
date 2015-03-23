@@ -74,7 +74,7 @@ public:
         defineQVariantCasts();
     }
 
-    Target execPrepared(const PreparedTemplate &preparedTemplate, const QVariantHash &inputs)
+    Target execPrepared(const PreparedTemplate &preparedTemplate, const Engine::Context &inputs)
     {
         ChaiScriptTargetBuilderApi scriptTargetBuilder(preparedTemplate.originPositions);
         auto old_state = m_chai.get_state();
@@ -134,9 +134,12 @@ private:
     {
         m_chai.eval(R"CHAISCRIPT(
 def for_each_with_index(container, func) {
- for (var i = 0; i < container.size(); ++i) {
-   func(container[i], i);
- }
+  for (var i = 0; i < container.size(); ++i) {
+    func(container[i], i);
+  }
+}
+def to_string(void) {
+  ""
 }
                        )CHAISCRIPT"
                 , chaiscript::Exception_Handler(), "twofold prelude");
@@ -157,8 +160,18 @@ def for_each_with_index(container, func) {
         m_chai.add(chaiscript::fun< std::string (const QVariant*) >([](const QVariant* v){
             return v->toString().toStdString();
         }), "to_string");
+//        m_chai.add(chaiscript::fun< std::string (void) >([](void){
+//            return "";
+//        }), "to_string");
 
-        m_chai.add(chaiscript::fun< QVariant (const std::string&, const QVariant*) >([](const std::string& k, const QVariant* v)->QVariant{
+        m_chai.add(chaiscript::fun< bool (const QVariant*, bool) >([](const QVariant* v, bool x){
+            return v->toBool() == x;
+        }), "==");
+        m_chai.add(chaiscript::fun< bool (const QVariant*, std::string) >([](const QVariant* v, const std::string &x){
+            return v->toString().toStdString() == x;
+        }), "==");
+
+        m_chai.add(chaiscript::fun< QVariant (const QVariant*, const std::string&) >([](const QVariant* v, const std::string& k){
             if (v->canConvert(QMetaType::QObjectStar)) {
                 const auto* o = v->value<QObject*>();
                 return o->property( k.c_str() );
@@ -180,6 +193,11 @@ def for_each_with_index(container, func) {
             }
             throw std::range_error("unknown type");
         }), "[]");
+
+        m_chai.add(chaiscript::user_type<QObject>(), "QObject");
+        m_chai.add(chaiscript::fun< QVariant (const QObject*, const std::string&) >([](const QObject* o, const std::string& k){
+            return o->property( k.c_str() );
+        }), "method_missing");
 
         m_chai.add(chaiscript::user_type<QString>(), "QString");
         m_chai.add(chaiscript::type_conversion<std::string, QString>([](const std::string& v){return QString::fromStdString(v);}));
@@ -206,10 +224,10 @@ def for_each_with_index(container, func) {
         m_chai.add_global(chaiscript::var(&templateApi), "_template");
     }
 
-    void defineInputs(const QVariantHash &inputs)
+    void defineInputs(const Engine::Context &inputs)
     {
-        for (auto key : inputs.keys()) {
-            m_chai.add_global(chaiscript::const_var(inputs[key]), key.toStdString());
+        for (const auto &v : inputs) {
+            m_chai.add_global(v.second, v.first);
         }
     }
 
@@ -236,7 +254,7 @@ void Engine::showTemplateSyntaxErrors(const PreparedTemplate &) const
     //        m_private->showSyntaxError(checkResult, preparedTemplate);
 }
 
-Target Engine::exec(const PreparedTemplate &preparedTemplate, const QVariantHash &inputs)
+Target Engine::exec(const PreparedTemplate &preparedTemplate, const Context &inputs)
 {
     return m_private->execPrepared(preparedTemplate, inputs);
 }
@@ -248,7 +266,7 @@ PreparedTemplate Engine::prepare(const QString &templateName) const
     return prepared;
 }
 
-Target Engine::execTemplateName(const QString &templateName, const QVariantHash &inputs)
+Target Engine::execTemplateName(const QString &templateName, const Context &inputs)
 {
     auto prepared = this->prepare(templateName);
     return this->exec(prepared, inputs);

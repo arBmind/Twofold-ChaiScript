@@ -1,5 +1,4 @@
-#ifndef TWOFOLD_INTERN_CHAISTDLIB_H
-#define TWOFOLD_INTERN_CHAISTDLIB_H
+#pragma once
 
 namespace Twofold {
 namespace intern {
@@ -8,5 +7,3 @@ namespace intern {
 
 } // namespace intern
 } // namespace Twofold
-
-#endif // TWOFOLD_INTERN_CHAISTDLIB_H

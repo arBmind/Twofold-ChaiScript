@@ -33,19 +33,29 @@ def methodArgs(args) {
     // use backslash to avoid linebreaks
         \#{arg}
   });
-  ""
 }
 def showMethod(method) {
         |function #{method.name}(#{methodArgs(method.args)}) {
   // if body contains multiple lines they will all be indented
         |  #{method.body}
         |}
-   ""
 }
 )TWOFOLD";
 
 static const QString main_twofold = R"TWOFOLD(
 #include "included.twofold"
+
+class MyObject {
+  attr memLambda
+  def MyObject(cb) {
+    this.memLambda = cb
+  }
+}
+var x = MyObject(fun(){
+  \hello
+})
+        var y = x.memLambda
+        | invoke #{y()}
 
         |function #{name}Class(#{methodArgs(args)}) {
 methods.for_each_with_index(fun(method, i){
@@ -95,10 +105,12 @@ int main(int argc, char *argv[])
     // Use QObject dynamic properties
     helloMethod.setProperty("body", "console.log('Hello' + greeted);");
 
-    QVariantHash context; // these are the globals in the javascript execution
-    context.insert( "name", "TwofoldGenerated" );
-    context.insert( "args", QStringList() );
-    context.insert( "methods", QVariantList() << QVariant::fromValue(&helloMethod) );
+    Engine::Context context; // these are the globals in the javascript execution
+    context["name"] = chaiscript::const_var(std::string("TwofoldGenerated"));
+    context["args"] = chaiscript::const_var(std::vector<chaiscript::Boxed_Value>());
+    context["methods"] = chaiscript::const_var(std::vector<chaiscript::Boxed_Value>({
+        chaiscript::const_var((QObject*)&helloMethod)
+    }));
 
     Target target = engine.exec(prepared, context);
 
