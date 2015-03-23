@@ -4,6 +4,10 @@
 
 This is the second C++ implementation of Twofold.
 
+**This is very experimental and not ready for production.**
+
+[hicknhack-software/Twofold-Qt](https://github.com/hicknhack-software/Twofold-Qt) is a production ready version working with Javascript.
+
 ## What is the best method to generate source code?
 
 * more difficult than regular html. It requires tight controls about every whitespace and tools for indentation.
