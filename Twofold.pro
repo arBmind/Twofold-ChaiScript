@@ -1,8 +1,8 @@
-# Twofold-Qt
-# (C) Copyright 2014 HicknHack Software GmbH
+# Twofold-ChaiScript
+# (C) Copyright 2015 HicknHack Software GmbH
 #
 # The original code can be found at:
-#    https://github.com/hicknhack-software/Twofold-Qt
+#    https://github.com/arBmind/Twofold-ChaiScript
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

@@ -1,6 +1,6 @@
 [submodule "vendor/ChaiScript"]
 	path = vendor/ChaiScript
-	url = https://github.com/ChaiScript/ChaiScript.git
+url=https://github.com/arBmind/ChaiScript.git
 [submodule "vendor/SourceMap"]
 	path = vendor/SourceMap
 	url = https://github.com/hicknhack-software/SourceMap-Qt.git
