@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     // Use QObject dynamic properties
     helloMethod.setProperty("body", "console.log('Hello' + greeted);");
 
-    Engine::Context context; // these are the globals in the javascript execution
+    Engine::Context context; // these are the globals in the script execution
     context["name"] = chaiscript::const_var(std::string("TwofoldGenerated"));
     context["args"] = chaiscript::const_var(std::vector<chaiscript::Boxed_Value>());
     context["methods"] = chaiscript::const_var(std::vector<chaiscript::Boxed_Value>({

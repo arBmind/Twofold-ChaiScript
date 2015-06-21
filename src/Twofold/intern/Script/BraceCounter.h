@@ -39,7 +39,7 @@ public:
     static int countExpressionDepth(It begin, It end, int beginDepth = 0);
 
     /**
-     * @return the iterator to the end of the javascript expression
+     * @return the iterator to the end of the script expression
      * will return end if no end of the expression was found
      */
     static It findExpressionEnd(It begin, It end);
