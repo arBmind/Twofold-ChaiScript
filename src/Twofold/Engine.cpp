@@ -39,27 +39,27 @@ using namespace intern;
 
 namespace {
 
-FileLineColumnPositionList generateExceptionCallerStack(const PreparedTemplate &preparedTemplate, const QStringList &backtrace)
-{
-    FileLineColumnPositionList callerStack;
-    for (const auto& traceLine : backtrace) {
-        // traceline format: "<function>() at <line>"
-        auto begin = traceLine.begin();
-        const auto end = traceLine.end();
+//FileLineColumnPositionList generateExceptionCallerStack(const PreparedTemplate &preparedTemplate, const QStringList &backtrace)
+//{
+//    FileLineColumnPositionList callerStack;
+//    for (const auto& traceLine : backtrace) {
+//        // traceline format: "<function>() at <line>"
+//        auto begin = traceLine.begin();
+//        const auto end = traceLine.end();
 
-        begin = find_last(begin, end, QChar(' '));
-        QString lineString = toQString(begin, end);
+//        begin = find_last(begin, end, QChar(' '));
+//        QString lineString = toQString(begin, end);
 
-        bool convertSuccesful = false;
-        const int line = lineString.toInt(&convertSuccesful);
-        const int column = 1;
-        if (convertSuccesful) {
-            const auto position = SourceMap::getOriginalPositionFromGenerated(preparedTemplate.sourceMap, {line, column});
-            callerStack.push_back(position);
-        }
-    }
-    return callerStack;
-}
+//        bool convertSuccesful = false;
+//        const int line = lineString.toInt(&convertSuccesful);
+//        const int column = 1;
+//        if (convertSuccesful) {
+//            const auto position = SourceMap::getOriginalPositionFromGenerated(preparedTemplate.sourceMap, {line, column});
+//            callerStack.push_back(position);
+//        }
+//    }
+//    return callerStack;
+//}
 
 } // namespace
 
