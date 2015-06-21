@@ -26,7 +26,7 @@ install:
 - if [ "$QT_BASE" = "54" ]; then sudo apt-get install -qq qt54base qt54script; source /opt/qt54/bin/qt54-env.sh; fi
 
 script:
-- qmake -r "QMAKE_CXX=$CXX" "QMAKE_CC=$CC"
+- qmake -r "QMAKE_CXX=$CXX" "QMAKE_CC=$CC" "QMAKE_LINK=$CXX"
 - make check
 
 addons:

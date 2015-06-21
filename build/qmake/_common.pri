@@ -19,6 +19,8 @@ QT += core
 QT -= gui
 
 CONFIG += c++11
+# really optimize it!
+isEqual(QMAKE_CXXFLAGS_RELEASE,-O2): QMAKE_CXXFLAGS_RELEASE = -O3
 
 LIB_PATH = $$BUILD_ROOT/bin
 LIB_VENDOR = $$BUILD_ROOT/vendor/lib
