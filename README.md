@@ -128,6 +128,8 @@ function TwofoldGenerated() {
 
 Twofold is simple. We find it very useful as it is.
 
+* Get ChaiScript faster than JavaScript
+* Improve script error handling
 * feel free to add your wish as an issue
 
 ## License
