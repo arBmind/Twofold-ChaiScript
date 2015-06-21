@@ -4,6 +4,8 @@
 
 This is the second C++ implementation of Twofold.
 
+[![Build Status](https://travis-ci.org/arBmind/Twofold-ChaiScript.svg?branch=develop)](https://travis-ci.org/arBmind/Twofold-ChaiScript)
+
 **This is very experimental and not ready for production.**
 
 [hicknhack-software/Twofold-Qt](https://github.com/hicknhack-software/Twofold-Qt) is a production ready version working with Javascript.
