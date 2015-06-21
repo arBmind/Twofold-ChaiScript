@@ -28,7 +28,6 @@ SOURCES += \
     Twofold/PreparedTemplateBuilder.cpp \
     Twofold/SourceMap.cpp \
     Twofold/intern/LineProcessor.cpp \
-    Twofold/intern/PreparedJavascriptBuilder.cpp \
     Twofold/intern/SourceMapTextBuilder.cpp \
     Twofold/intern/TextBuilder.cpp \
     Twofold/intern/Command/Include.cpp \
@@ -38,14 +37,14 @@ SOURCES += \
     Twofold/intern/Line/InterpolateLine.cpp \
     Twofold/intern/Line/Interpolation.cpp \
     Twofold/intern/Line/Passtrough.cpp \
-    Twofold/intern/Javascript/BraceCounter.cpp \
+    Twofold/intern/Script/BraceCounter.cpp \
     Twofold/intern/ChaiScriptTargetBuilderApi.cpp \
-    Twofold/intern/ChaiStdLib.cpp
+    Twofold/intern/ChaiStdLib.cpp \
+    Twofold/intern/PreparedChaiScriptBuilder.cpp
 
 HEADERS += \
     Twofold/intern/find_last.h \
     Twofold/intern/LineProcessor.h \
-    Twofold/intern/PreparedJavascriptBuilder.h \
     Twofold/intern/QCharHelper.h \
     Twofold/intern/QStringHelper.h \
     Twofold/intern/SourceMapTextBuilder.h \
@@ -57,9 +56,10 @@ HEADERS += \
     Twofold/intern/Line/InterpolateLine.h \
     Twofold/intern/Line/Interpolation.h \
     Twofold/intern/Line/Passtrough.h \
-    Twofold/intern/Javascript/BraceCounter.h \
+    Twofold/intern/Script/BraceCounter.h \
     Twofold/intern/ChaiScriptTargetBuilderApi.h \
-    Twofold/intern/ChaiStdLib.h
+    Twofold/intern/ChaiStdLib.h \
+    Twofold/intern/PreparedChaiScriptBuilder.h
     Twofold/intern/Base64VLQ.h
 
 INSTALL_HEADERS += \

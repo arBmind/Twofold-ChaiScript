@@ -18,8 +18,8 @@ We faced these challanges and Twofold is the result.
 ## Features
 
 * indentation handling
-* source maps for generated javascript
-  * javascript exceptions and syntax errors will point into your template
+* source maps for generated script
+  * script exceptions and syntax errors will point into your template
 * nested source maps for generated targets
   * positions of all the calls that lead to any target character
 * control of every generated line and every whitespace
@@ -38,21 +38,21 @@ We faced these challanges and Twofold is the result.
 
 ## How does it work?
 
-Twofold is basically Javascript that is extended with constructs to generate source code output.
+Twofold is basically ChaiScript that is extended with constructs to generate source code output.
 
 ```twofold
   \ indented output #{interpolated} without a line break
   | indented output #{interpolated} with a line break
   # include "indent_the_included_file.twofold"
-  = change_indentation_of_javascript()
-// every line is regular javascript
+  = change_indentation_of_chaiscript()
+// every line is regular ChaiScript
 ```
 
 These control characters have to be the first non-whitespace character on each line.
 Every whitespace before them is ignored.
 Every whitespace after is used as the indentation. Indentation is cumulative and added to each generated line.
 
-**Hint:** Use the whitespaces before control characters to indent them in a column deeper than any surrounding javascript.
+**Hint:** Use the whitespaces before control characters to indent them in a column deeper than any surrounding ChaiScript.
 This gives you a visual splitter.
 
 This is basically everything you need to know.
@@ -112,7 +112,7 @@ If we run this template against the following data. See the BasicUsage example.
 
 Twofold will generate the following output.
 
-```javascript
+```chaiscript
 function TwofoldGenerated() {
   function hello(greeted) {
     console.log('Hello ' + greeted);

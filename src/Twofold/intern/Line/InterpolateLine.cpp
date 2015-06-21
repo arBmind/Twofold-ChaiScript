@@ -18,13 +18,13 @@
  */
 #include "InterpolateLine.h"
 
-#include "Twofold/intern/PreparedJavascriptBuilder.h"
+#include "Twofold/intern/PreparedChaiScriptBuilder.h"
 
 namespace Twofold {
 namespace intern {
 namespace Line {
 
-InterpolateLine::InterpolateLine(const MessageHandlerPtr &messageHandler, PreparedJavascriptBuilder &builder)
+InterpolateLine::InterpolateLine(const MessageHandlerPtr &messageHandler, PreparedChaiScriptBuilder &builder)
     : Interpolation(messageHandler, builder)
 {
 }

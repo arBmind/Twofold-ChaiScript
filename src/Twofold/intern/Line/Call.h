@@ -24,24 +24,24 @@ namespace Twofold {
 namespace intern {
 
 struct FileLine;
-class PreparedJavascriptBuilder;
+class PreparedChaiScriptBuilder;
 
 namespace Line {
 
 /**
- * @brief line processing for calling a javascript function
+ * @brief line processing for calling a chaiscript function
  * whose output is handled indentation aware.
  */
 class Call
 {
 public:
-    Call(const MessageHandlerPtr &messageHandler, PreparedJavascriptBuilder &builder);
+    Call(const MessageHandlerPtr &messageHandler, PreparedChaiScriptBuilder &builder);
 
     void operator() (const FileLine& line) const;
 
 private:
     const MessageHandlerPtr m_messageHandler;
-    PreparedJavascriptBuilder &m_builder;
+    PreparedChaiScriptBuilder &m_builder;
 };
 
 } // namespace Line

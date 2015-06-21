@@ -97,8 +97,8 @@ int main(int argc, char *argv[])
                   std::make_shared<FakeTextLoader>());
     PreparedTemplate prepared = engine.prepare("main.twofold");
 
-    ::qDebug() << "generated javascript:";
-    ::qDebug() << prepared.javascript;
+    ::qDebug() << "generated script:";
+    ::qDebug() << prepared.script;
     ::qDebug() << "-----";
 
     MethodDescription helloMethod("hello", {"greeted"});

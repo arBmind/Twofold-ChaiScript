@@ -147,7 +147,7 @@ void TestIntegration::testTarget()
     Engine engine(messageHandler, textLoader);
 
     auto prepared = engine.prepare("testTemplate");
-    //    qDebug() << prepared.javascript;
+    //    qDebug() << prepared.script;
     Target target = engine.exec(prepared, context);
 
     //    Target target = engine.execTemplateName("testTemplate", context);
@@ -157,7 +157,7 @@ void TestIntegration::testTarget()
     }
     QCOMPARE(messageHandler->count.message, messageCount.message);
     QCOMPARE(messageHandler->count.templateMessage, messageCount.templateMessage);
-    QCOMPARE(messageHandler->count.javaScriptMessage, messageCount.javaScriptMessage);
+    QCOMPARE(messageHandler->count.scriptMessage, messageCount.scriptMessage);
     QCOMPARE(target.text, targetText);
 }
 

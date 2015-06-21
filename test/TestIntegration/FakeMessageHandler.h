@@ -26,15 +26,15 @@
 
 struct MessageCount
 {
-    explicit MessageCount(int message = 0, int templateMessage = 0, int javaScriptMessage = 0)
+    explicit MessageCount(int message = 0, int templateMessage = 0, int scriptMessage = 0)
         : message(message)
         , templateMessage(templateMessage)
-        , javaScriptMessage(javaScriptMessage)
+        , scriptMessage(scriptMessage)
     {}
 
     int message = 0;
     int templateMessage = 0;
-    int javaScriptMessage = 0;
+    int scriptMessage = 0;
 };
 Q_DECLARE_METATYPE(MessageCount)
 
@@ -55,13 +55,13 @@ public:
         this->MessageHandler::templateMessage(type, position, text);
     }
 
-    void javaScriptMessage(Type type,
+    void scriptMessage(Type type,
                            const PositionStack &positionStack,
                            const Text& text) override
     {
         errorTemplatePosition = positionStack.front();
-        count.javaScriptMessage++;
-        this->MessageHandler::javaScriptMessage(type, positionStack, text);
+        count.scriptMessage++;
+        this->MessageHandler::scriptMessage(type, positionStack, text);
     }
 
     void display()

@@ -47,7 +47,7 @@ public:
                          const Position &position,
                          const Text &text) override;
 
-    void javaScriptMessage(Type type,
+    void scriptMessage(Type type,
                            const PositionStack &postionStack,
                            const Text &text) override;
 

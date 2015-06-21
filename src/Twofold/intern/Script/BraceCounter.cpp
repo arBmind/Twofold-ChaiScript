@@ -2,7 +2,7 @@
 
 namespace Twofold {
 namespace intern {
-namespace Javascript {
+namespace Script {
 namespace {
 
 #define ROUND_OPEN '('
@@ -117,6 +117,6 @@ BraceCounter::findExpressionEnd(It it, It end)
     return it;
 }
 
-} // namespace Javascript
+} // namespace Script
 } // namespace intern
 } // namespace Twofold

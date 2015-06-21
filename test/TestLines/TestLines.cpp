@@ -21,6 +21,15 @@
 
 #include <QtTest>
 
+
+#include "chaiscript/chaiscript.hpp"
+
+namespace Twofold {
+namespace intern {
+chaiscript::ModulePtr chaiscript_stdlib();
+} // namespace intern
+} // namespace Twofold
+
 class TestLines : public QObject
 {
     Q_OBJECT
@@ -28,6 +37,16 @@ class TestLines : public QObject
 private Q_SLOTS:
     void testLines_data();
     void testLines();
+
+    void testChai() {
+        using namespace chaiscript;
+//        ChaiScript chai(Twofold::intern::chaiscript_stdlib());
+        Boxed_Value b = var(5);
+        QVERIFY(5 == boxed_cast<int>(b));
+
+        Boxed_Value c = var("Hello World");
+        QVERIFY(0 == strcmp(boxed_cast<const char*>(c), "Hello World"));
+    }
 };
 
 void TestLines::testLines_data()

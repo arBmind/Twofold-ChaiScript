@@ -23,6 +23,8 @@
 #include <QtTest>
 
 #include <utility>
+#include <iostream>
+#include <string>
 
 class TestBenchmark : public QObject
 {
@@ -34,6 +36,7 @@ public:
 private Q_SLOTS:
     void prepare();
     void execute();
+    void executeCPP();
 
 private:
     Twofold::Engine::Context context;
@@ -51,24 +54,6 @@ for(var i = 0; i <= 10000; ++i) {
     | Das ist ein kurzer Text! #{i}
     # include "lib.twofold"
 }
-|---------------------------------
-|
-def structFieldHeader(type) {
-  |#{ type.name }
-  |struct #{ type.name } {
-  |};
-}
-
-if (type.isArray == true) {
-    | // #{ type.name } Type is an Array #{type.text}"
-    = structFieldHeader(type);
-}
-
-    |class #{ name } {
-for(var i = 0; i < baseNames.size; ++i) {
-    |  #{ (i==0) ? ":" : "," } public #{ baseNames[i] }
-}
-    |};
 )EXAMPLE";
 
         static const QString templateText2 = R"EXAMPLE(
@@ -114,9 +99,44 @@ void TestBenchmark::execute()
     Engine engine(std::make_shared<MessageHandler>(),
                   std::make_shared<FakeTextLoader>());
     PreparedTemplate prepared = engine.prepare("TextTemplate.twofold");
+    //    qDebug() << prepared.script;
+
+    Target target = {SourceMapping({{}, {}}), QString()};
+    QBENCHMARK {
+        target = engine.exec(prepared, context);
+    }
+}
+
+#include "Twofold/intern/ChaiScriptTargetBuilderApi.h"
+
+void TestBenchmark::executeCPP()
+{
+    using namespace Twofold;
+    Engine engine(std::make_shared<MessageHandler>(),
+                  std::make_shared<FakeTextLoader>());
+    PreparedTemplate prepared = engine.prepare("TextTemplate.twofold");
+
+    Target target = {SourceMapping({{}, {}}), QString()};
 
     QBENCHMARK {
-        engine.exec(prepared, context);
+        intern::ChaiScriptTargetBuilderApi _template(prepared.originPositions);
+        for(auto i = 0; i <= 10000; ++i) {
+            _template.indentPart(" ", 0);
+            _template.append("Das ist ein kurzer Text! ", 1);
+            _template.pushPartIndent(2);_template.append(std::to_string(i), 2);_template.popPartIndent();
+            _template.newLine();
+            _template.pushIndentation(" ", 3);
+
+            _template.indentPart("", 4);
+            _template.append("Line 1 included", 5);
+            _template.newLine();
+            _template.indentPart("", 6);
+            _template.append("Line 2 incldued", 7);
+            _template.newLine();
+            _template.popIndentation();
+        }
+        const auto sourceMapText = _template.build();
+        target = Target{ sourceMapText.sourceMap, sourceMapText.text };
     }
 }
 

@@ -19,7 +19,7 @@
 #include "Include.h"
 
 #include "Twofold/intern/Line/Command.h"
-#include "Twofold/intern/PreparedJavascriptBuilder.h"
+#include "Twofold/intern/PreparedChaiScriptBuilder.h"
 #include "Twofold/intern/QStringHelper.h"
 
 #include <QDebug>
@@ -105,7 +105,7 @@ private:
 
 } // namespace
 
-Include::Include(const MessageHandlerPtr &messageHandler, const TextLoaderPtr &textLoader, PreparedJavascriptBuilder &builder, const ProcessIncludedTextFunction &processIncludeText)
+Include::Include(const MessageHandlerPtr &messageHandler, const TextLoaderPtr &textLoader, PreparedChaiScriptBuilder &builder, const ProcessIncludedTextFunction &processIncludeText)
     : m_messageHandler(messageHandler)
     , m_textLoader(textLoader)
     , m_builder(builder)

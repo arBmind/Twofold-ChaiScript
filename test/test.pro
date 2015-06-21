@@ -19,5 +19,5 @@ TEMPLATE = subdirs
 SUBDIRS += \
     TestIntegration \
     TestLines \
-    TestJavaScript \
+    TestChaiScript \
     TestBenchmark

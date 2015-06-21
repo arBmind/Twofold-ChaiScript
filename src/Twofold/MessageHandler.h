@@ -53,7 +53,7 @@ public:
                                  const Position &position,
                                  const Text &text);
 
-    virtual void javaScriptMessage(Type type,
+    virtual void scriptMessage(Type type,
                                    const PositionStack &positionStack,
                                    const Text &text);
 };

@@ -18,7 +18,7 @@
  */
 #include "Passtrough.h"
 
-#include "Twofold/intern/PreparedJavascriptBuilder.h"
+#include "Twofold/intern/PreparedChaiScriptBuilder.h"
 #include "Twofold/intern/LineProcessor.h"
 
 #include "Twofold/intern/QStringHelper.h"
@@ -27,7 +27,7 @@ namespace Twofold {
 namespace intern {
 namespace Line {
 
-Passtrough::Passtrough(PreparedJavascriptBuilder &builder)
+Passtrough::Passtrough(PreparedChaiScriptBuilder &builder)
     : m_builder(builder)
 {
 }

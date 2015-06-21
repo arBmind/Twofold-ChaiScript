@@ -23,7 +23,7 @@
 namespace Twofold {
 namespace intern {
 
-class PreparedJavascriptBuilder;
+class PreparedChaiScriptBuilder;
 struct FileLine;
 
 namespace Line {
@@ -31,20 +31,20 @@ namespace Line {
 /**
  * @brief line processing to output text.
  *
- * Supports inline expressions like #{ javascript-expression }
- * and escape sequences like ##{ javascript-expression }
- * in order to output '#{ javascript-expression }'.
+ * Supports inline expressions like #{ script-expression }
+ * and escape sequences like ##{ script-expression }
+ * in order to output '#{ script-expression }'.
  */
 class Interpolation
 {
 public:
-    Interpolation(const MessageHandlerPtr& messageHandler, PreparedJavascriptBuilder &builder);
+    Interpolation(const MessageHandlerPtr& messageHandler, PreparedChaiScriptBuilder &builder);
 
     void operator() (const FileLine& line) const;
 
 protected:
     const MessageHandlerPtr m_messageHandler;
-    PreparedJavascriptBuilder &m_builder;
+    PreparedChaiScriptBuilder &m_builder;
 };
 
 } // namespace Line

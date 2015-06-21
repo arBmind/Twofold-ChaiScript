@@ -45,39 +45,39 @@ using PopTargetIndentation = OriginTextTemplate<OriginTextType::PopIndention>;
 using TargetNewLine = OriginTextTemplate<OriginTextType::NewLine>;
 
 /**
- * @brief data structure representing the prepared javascript
+ * @brief data structure representing the prepared ChaiScript
  */
-struct PreparedJavascript
+struct PreparedChaiScript
 {
-    const QString javascript;
+    const QString chaiscript;
     const SourceMapping sourceMap;
     const FileLineColumnPositionList originPositions;
 };
 
 /**
- * @brief Builds template rendering javascript and source maps
+ * @brief Builds template rendering ChaiScript and source maps
  *
  * builder class
  */
-class PreparedJavascriptBuilder
+class PreparedChaiScriptBuilder
 {
 public:
-    PreparedJavascript build() const;
+    PreparedChaiScript build() const;
 
     inline const QString& indentation() const { return m_sourceMapBuilder.indentation(); }
     inline void setIndentation(const QString &indent) { m_sourceMapBuilder.setIndentation(indent); }
 
-    PreparedJavascriptBuilder &operator <<(const OriginScript& script);
-    PreparedJavascriptBuilder &operator <<(const OriginScriptExpression& expr);
-    PreparedJavascriptBuilder &operator <<(const OriginTarget& target);
+    PreparedChaiScriptBuilder &operator <<(const OriginScript& script);
+    PreparedChaiScriptBuilder &operator <<(const OriginScriptExpression& expr);
+    PreparedChaiScriptBuilder &operator <<(const OriginTarget& target);
 
-    PreparedJavascriptBuilder &operator <<(const IndentTargetPart& indent);
-    PreparedJavascriptBuilder &operator <<(const PushTargetIndentation& indent);
-    PreparedJavascriptBuilder &operator <<(const PopTargetIndentation &indent);
+    PreparedChaiScriptBuilder &operator <<(const IndentTargetPart& indent);
+    PreparedChaiScriptBuilder &operator <<(const PushTargetIndentation& indent);
+    PreparedChaiScriptBuilder &operator <<(const PopTargetIndentation &indent);
 
-    PreparedJavascriptBuilder &operator <<(const TargetNewLine newLine);
+    PreparedChaiScriptBuilder &operator <<(const TargetNewLine newLine);
 
-    PreparedJavascriptBuilder &operator <<(const NewLine);
+    PreparedChaiScriptBuilder &operator <<(const NewLine);
 
 private:
     size_t addOriginPosition(const FileLineColumnPosition &position);

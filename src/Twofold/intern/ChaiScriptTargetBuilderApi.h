@@ -28,9 +28,9 @@ namespace Twofold {
 namespace intern {
 
 /**
- * @brief Target Builder with a QScript callable Api
+ * @brief Target Builder with a ChaiScript callable Api
  *
- * all public slots are callable by Javascript
+ * all public slots are callable by script
  */
 class ChaiScriptTargetBuilderApi
 {
@@ -41,13 +41,14 @@ public:
     inline SourceMapText build() const { return m_sourceMapBuilder.build(); }
 
 public:
-    void append(const QString &text, int originIndex);
+    void append(const std::string &text, int originIndex);
     void newLine();
 
-    void pushIndentation(const QString &indent, int originIndex);
+    void pushIndentation(const std::string &indent, int originIndex);
+    void _pushIndentation(const QString &indent, int originIndex);
     void popIndentation();
 
-    void indentPart(const QString& indent, int originIndex);
+    void indentPart(const std::string &indent, int originIndex);
     void pushPartIndent(int originIndex);
     void popPartIndent();
 

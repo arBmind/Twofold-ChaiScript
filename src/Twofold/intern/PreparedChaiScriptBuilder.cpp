@@ -16,7 +16,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "PreparedJavascriptBuilder.h"
+#include "PreparedChaiScriptBuilder.h"
 
 #include "Twofold/intern/QStringHelper.h"
 
@@ -45,7 +45,7 @@ private:
     QString& m_dst;
 };
 
-QString escapeForJavascriptString(const TextSpan& source)
+QString escapeForChaiScriptString(const TextSpan& source)
 {
     QString out;
     out.reserve(std::distance(source.begin, source.end));
@@ -74,19 +74,19 @@ OriginText buildOriginText(FileLineColumnPosition origin,
 
 } // namespace
 
-PreparedJavascript PreparedJavascriptBuilder::build() const
+PreparedChaiScript PreparedChaiScriptBuilder::build() const
 {
     auto sourceMapText = m_sourceMapBuilder.build();
-    return PreparedJavascript { sourceMapText.text, sourceMapText.sourceMap, m_originPositions };
+    return PreparedChaiScript { sourceMapText.text, sourceMapText.sourceMap, m_originPositions };
 }
 
-PreparedJavascriptBuilder &PreparedJavascriptBuilder::operator <<(const OriginScript &script)
+PreparedChaiScriptBuilder &PreparedChaiScriptBuilder::operator <<(const OriginScript &script)
 {
     m_sourceMapBuilder << script.text << NewLine();
     return *this;
 }
 
-PreparedJavascriptBuilder &PreparedJavascriptBuilder::operator <<(const OriginScriptExpression &expr)
+PreparedChaiScriptBuilder &PreparedChaiScriptBuilder::operator <<(const OriginScriptExpression &expr)
 {
     static QString s_prefix("_template.pushPartIndent(%1);_template.append((");
     static QString s_postfix(").to_string(), %1);_template.popPartIndent();"); // origin index
@@ -107,7 +107,7 @@ PreparedJavascriptBuilder &PreparedJavascriptBuilder::operator <<(const OriginSc
     return *this;
 }
 
-PreparedJavascriptBuilder &PreparedJavascriptBuilder::operator<<(const OriginTarget &target)
+PreparedChaiScriptBuilder &PreparedChaiScriptBuilder::operator<<(const OriginTarget &target)
 {
     static QString s_prefix("_template.append(\"");
     static QString s_postfix("\", %1);"); // origin index
@@ -121,13 +121,13 @@ PreparedJavascriptBuilder &PreparedJavascriptBuilder::operator<<(const OriginTar
     const QString postfix = s_postfix.arg(originIndex);
 
     m_sourceMapBuilder << buildOriginText(target.text.origin, -1, s_prefix, Interpolation::None);
-    m_sourceMapBuilder << OriginText { target.text.origin, escapeForJavascriptString(target.text.span) };
+    m_sourceMapBuilder << OriginText { target.text.origin, escapeForChaiScriptString(target.text.span) };
     m_sourceMapBuilder << buildOriginText(target.text.origin, originLength, postfix, Interpolation::None);
     m_sourceMapBuilder << NewLine();
     return *this;
 }
 
-PreparedJavascriptBuilder &PreparedJavascriptBuilder::operator <<(const IndentTargetPart &indent)
+PreparedChaiScriptBuilder &PreparedChaiScriptBuilder::operator <<(const IndentTargetPart &indent)
 {
     static QString s_prefix("_template.indentPart(\"");
     static QString s_postfix("\", %1);"); // origin index
@@ -138,13 +138,13 @@ PreparedJavascriptBuilder &PreparedJavascriptBuilder::operator <<(const IndentTa
     const QString postfix = s_postfix.arg(originIndex);
 
     m_sourceMapBuilder << buildOriginText(indent.text.origin, -1, s_prefix, Interpolation::None);
-    m_sourceMapBuilder << OriginText { indent.text.origin, escapeForJavascriptString(indent.text.span) };
+    m_sourceMapBuilder << OriginText { indent.text.origin, escapeForChaiScriptString(indent.text.span) };
     m_sourceMapBuilder << buildOriginText(indent.text.origin, originLength, postfix, Interpolation::None);
     m_sourceMapBuilder << NewLine();
     return *this;
 }
 
-PreparedJavascriptBuilder &PreparedJavascriptBuilder::operator <<(const PushTargetIndentation &indent)
+PreparedChaiScriptBuilder &PreparedChaiScriptBuilder::operator <<(const PushTargetIndentation &indent)
 {
     static QString s_prefix("_template.pushIndentation(\"");
     static QString s_postfix("\", %1);"); // origin index
@@ -155,13 +155,13 @@ PreparedJavascriptBuilder &PreparedJavascriptBuilder::operator <<(const PushTarg
     const QString postfix = s_postfix.arg(originIndex);
 
     m_sourceMapBuilder << buildOriginText(indent.text.origin, -1, s_prefix, Interpolation::None);
-    m_sourceMapBuilder << OriginText { indent.text.origin, escapeForJavascriptString(indent.text.span) };
+    m_sourceMapBuilder << OriginText { indent.text.origin, escapeForChaiScriptString(indent.text.span) };
     m_sourceMapBuilder << buildOriginText(indent.text.origin, originLength, postfix, Interpolation::None);
     m_sourceMapBuilder << NewLine();
     return *this;
 }
 
-PreparedJavascriptBuilder &PreparedJavascriptBuilder::operator <<(const PopTargetIndentation &indent)
+PreparedChaiScriptBuilder &PreparedChaiScriptBuilder::operator <<(const PopTargetIndentation &indent)
 {
     static QString s_code("_template.popIndentation();");
 
@@ -170,7 +170,7 @@ PreparedJavascriptBuilder &PreparedJavascriptBuilder::operator <<(const PopTarge
     return *this;
 }
 
-PreparedJavascriptBuilder &PreparedJavascriptBuilder::operator <<(const TargetNewLine newLine)
+PreparedChaiScriptBuilder &PreparedChaiScriptBuilder::operator <<(const TargetNewLine newLine)
 {
     static QString s_code("_template.newLine();");
 
@@ -179,13 +179,13 @@ PreparedJavascriptBuilder &PreparedJavascriptBuilder::operator <<(const TargetNe
     return *this;
 }
 
-PreparedJavascriptBuilder &PreparedJavascriptBuilder::operator <<(const NewLine)
+PreparedChaiScriptBuilder &PreparedChaiScriptBuilder::operator <<(const NewLine)
 {
     m_sourceMapBuilder << NewLine();
     return *this;
 }
 
-size_t PreparedJavascriptBuilder::addOriginPosition(const FileLineColumnPosition &position)
+size_t PreparedChaiScriptBuilder::addOriginPosition(const FileLineColumnPosition &position)
 {
     m_originPositions.push_back(position);
     return m_originPositions.size() - 1;

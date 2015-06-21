@@ -28,7 +28,7 @@
 #include "Twofold/intern/Line/Command.h"
 
 #include "Twofold/intern/LineProcessor.h"
-#include "Twofold/intern/PreparedJavascriptBuilder.h"
+#include "Twofold/intern/PreparedChaiScriptBuilder.h"
 
 namespace Twofold {
 using namespace intern;
@@ -45,11 +45,11 @@ public:
     inline LineProcessor buildLineProcessor()
     {
         LineProcessor::Map map;
-        map['\\'] = Line::Interpolation(messageHandler, preparedJavascriptBuilder);
-        map['|'] = Line::InterpolateLine(messageHandler, preparedJavascriptBuilder);
-        map['='] = Line::Call(messageHandler, preparedJavascriptBuilder);
+        map['\\'] = Line::Interpolation(messageHandler, preparedScriptBuilder);
+        map['|'] = Line::InterpolateLine(messageHandler, preparedScriptBuilder);
+        map['='] = Line::Call(messageHandler, preparedScriptBuilder);
         map['#'] = Line::Command(buildLineCommand());
-        LineProcessor::Function fallback = Line::Passtrough(preparedJavascriptBuilder);
+        LineProcessor::Function fallback = Line::Passtrough(preparedScriptBuilder);
         return { std::move(map), std::move(fallback) };
     }
 
@@ -58,7 +58,7 @@ public:
         Line::Command::Map map;
         map["include"] = Command::Include(messageHandler,
                                           textLoader,
-                                          preparedJavascriptBuilder,
+                                          preparedScriptBuilder,
                                           std::ref(lineProcessor));
         Line::Command::Function fallback = Command::Missing(messageHandler);
         return { std::move(map), std::move(fallback) };
@@ -72,13 +72,13 @@ public:
         }
 
         lineProcessor(result.name, result.text);
-        const auto preparedJavascript = preparedJavascriptBuilder.build();
-        return { preparedJavascript.javascript, preparedJavascript.sourceMap, preparedJavascript.originPositions };
+        const auto preparedScript = preparedScriptBuilder.build();
+        return { preparedScript.chaiscript, preparedScript.sourceMap, preparedScript.originPositions };
     }
 
     const MessageHandlerPtr messageHandler;
     const TextLoaderPtr textLoader;
-    PreparedJavascriptBuilder preparedJavascriptBuilder;
+    PreparedChaiScriptBuilder preparedScriptBuilder;
     const LineProcessor lineProcessor;
 };
 

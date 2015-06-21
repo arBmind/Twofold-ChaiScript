@@ -30,7 +30,7 @@ namespace Twofold {
 
 struct PreparedTemplate
 {
-    const QString javascript;
+    const QString script;
     const SourceMapping sourceMap;
     const FileLineColumnPositionList originPositions;
 };

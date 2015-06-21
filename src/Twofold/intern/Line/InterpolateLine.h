@@ -31,7 +31,7 @@ namespace Line {
 class InterpolateLine : public Interpolation
 {
 public:
-    InterpolateLine(const MessageHandlerPtr& messageHandler, PreparedJavascriptBuilder &builder);
+    InterpolateLine(const MessageHandlerPtr& messageHandler, PreparedChaiScriptBuilder &builder);
 
     void operator() (const FileLine& line) const;
 };

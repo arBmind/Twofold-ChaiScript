@@ -21,7 +21,7 @@
 namespace Twofold {
 namespace intern {
 
-class PreparedJavascriptBuilder;
+class PreparedChaiScriptBuilder;
 struct FileLine;
 
 namespace Line {
@@ -33,12 +33,12 @@ namespace Line {
 class Passtrough
 {
 public:
-    explicit Passtrough(PreparedJavascriptBuilder &builder);
+    explicit Passtrough(PreparedChaiScriptBuilder &builder);
 
     void operator() (const FileLine& line) const;
 
 private:
-    PreparedJavascriptBuilder &m_builder;
+    PreparedChaiScriptBuilder &m_builder;
 };
 
 } // namespace Line

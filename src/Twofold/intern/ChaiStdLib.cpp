@@ -25,7 +25,7 @@ chaiscript::ModulePtr chaiscript_stdlib()
   auto m = chaiscript::Std_Lib::library();
 
   m->add(chaiscript::user_type<std::vector<QVariant>>(), "Vector_QVariant");
-  m->add(chaiscript::fun<size_t (const std::vector<QVariant> *)>([](const std::vector<QVariant> *a) { return a->size(); } ), "size");
+  m->add(chaiscript::fun([](const std::vector<QVariant> *a) { return a->size(); } ), "size");
   chaiscript::bootstrap::standard_library::random_access_container_type<std::vector<QVariant>>("Vector_QVariant", m);
 
   return m;

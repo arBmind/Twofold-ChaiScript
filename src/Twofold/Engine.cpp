@@ -83,14 +83,14 @@ public:
         defineTemplateApi(scriptTargetBuilder);
 
         try {
-            auto resultValue = m_chai.eval(preparedTemplate.javascript.toStdString(),
+            auto resultValue = m_chai.eval(preparedTemplate.script.toStdString(),
                                            chaiscript::exception_specification<const std::exception &>());
         } catch (const chaiscript::exception::eval_error &error) {
             const int line = error.start_position.line;
             const int column = error.start_position.column;
             FileLineColumnPositionList position {{ SourceMap::getOriginalPositionFromGenerated(preparedTemplate.sourceMap, {line, column}) }};
             const QString text = "Eval Error: " + QString::fromLatin1(error.what());
-            m_messageHandler->javaScriptMessage(MessageType::Error, position, text);
+            m_messageHandler->scriptMessage(MessageType::Error, position, text);
         } catch (const chaiscript::exception::bad_boxed_cast &e) {
             const QString text = "Bad Boxed Cast: " + QString::fromLatin1(e.what());
             m_messageHandler->message(MessageType::Error, text);
@@ -111,7 +111,7 @@ public:
     //        const int column = checkResult.errorColumnNumber();
     //        FileLineColumnPositionList position {{ SourceMap::getOriginalPositionFromGenerated(preparedTemplate.sourceMap, {line, column}) }};
     //        const QString text = "Syntax Error: " + checkResult.errorMessage();
-    //        m_messageHandler->javaScriptMessage(MessageType::Error, position, text);
+    //        m_messageHandler->scriptMessage(MessageType::Error, position, text);
     //    }
 
     PreparedTemplateBuilder createPreparedBuilder() {
@@ -127,7 +127,7 @@ private:
     //        const int column = 1; // TODO: use agent and stack!
     //        positionStack.insert(positionStack.begin(), SourceMap::getOriginalPositionFromGenerated(preparedTemplate.sourceMap, {line, column}));
     //        const QString text = "Uncaught Exception: " + resultValue.toString();
-    //        m_messageHandler->javaScriptMessage(MessageType::Error, positionStack, text);
+    //        m_messageHandler->scriptMessage(MessageType::Error, positionStack, text);
     //    }
 
     void defineQVariantCasts()
@@ -157,21 +157,21 @@ def to_string(void) {
             return r;
         }));
 
-        m_chai.add(chaiscript::fun< std::string (const QVariant*) >([](const QVariant* v){
+        m_chai.add(chaiscript::fun([](const QVariant* v){
             return v->toString().toStdString();
         }), "to_string");
 //        m_chai.add(chaiscript::fun< std::string (void) >([](void){
 //            return "";
 //        }), "to_string");
 
-        m_chai.add(chaiscript::fun< bool (const QVariant*, bool) >([](const QVariant* v, bool x){
+        m_chai.add(chaiscript::fun([](const QVariant* v, bool x){
             return v->toBool() == x;
         }), "==");
-        m_chai.add(chaiscript::fun< bool (const QVariant*, std::string) >([](const QVariant* v, const std::string &x){
+        m_chai.add(chaiscript::fun([](const QVariant* v, const std::string &x){
             return v->toString().toStdString() == x;
         }), "==");
 
-        m_chai.add(chaiscript::fun< QVariant (const QVariant*, const std::string&) >([](const QVariant* v, const std::string& k){
+        m_chai.add(chaiscript::fun([](const QVariant* v, const std::string& k){
             if (v->canConvert(QMetaType::QObjectStar)) {
                 const auto* o = v->value<QObject*>();
                 return o->property( k.c_str() );
@@ -183,7 +183,7 @@ def to_string(void) {
             throw std::range_error("unknown type");
         }), "method_missing");
 
-        m_chai.add(chaiscript::fun< QVariant (const QVariant*, int index) >([](const QVariant* v, int index)->QVariant{
+        m_chai.add(chaiscript::fun([](const QVariant* v, int index)->QVariant{
             if (v->canConvert(QMetaType::QVariantList)) {
                 const auto& s = v->value<QSequentialIterable>();
                 if (index >= s.size())
@@ -195,7 +195,7 @@ def to_string(void) {
         }), "[]");
 
         m_chai.add(chaiscript::user_type<QObject>(), "QObject");
-        m_chai.add(chaiscript::fun< QVariant (const QObject*, const std::string&) >([](const QObject* o, const std::string& k){
+        m_chai.add(chaiscript::fun([](const QObject* o, const std::string& k){
             return o->property( k.c_str() );
         }), "method_missing");
 
@@ -249,7 +249,7 @@ Engine::Engine(TextLoaderPtr textLoader, MessageHandlerPtr messageHandler)
 
 void Engine::showTemplateSyntaxErrors(const PreparedTemplate &) const
 {
-    //    auto checkResult = QScriptEngine::checkSyntax(preparedTemplate.javascript);
+    //    auto checkResult = QScriptEngine::checkSyntax(preparedTemplate.script);
     //    if (checkResult.state() == QScriptSyntaxCheckResult::Error)
     //        m_private->showSyntaxError(checkResult, preparedTemplate);
 }

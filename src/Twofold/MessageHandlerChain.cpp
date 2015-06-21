@@ -45,12 +45,12 @@ void MessageHandlerChain::templateMessage(Type type,
         handler->templateMessage(type, position, text);
 }
 
-void MessageHandlerChain::javaScriptMessage(Type type,
+void MessageHandlerChain::scriptMessage(Type type,
                                             const PositionStack &postionStack,
                                             const Text &text)
 {
     for(auto handler : m_handlers)
-        handler->javaScriptMessage(type, postionStack, text);
+        handler->scriptMessage(type, postionStack, text);
 }
 
 } // namespace Twofold

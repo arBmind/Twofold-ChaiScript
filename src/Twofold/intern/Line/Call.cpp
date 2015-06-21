@@ -18,23 +18,23 @@
  */
 #include "Call.h"
 
-#include "Twofold/intern/PreparedJavascriptBuilder.h"
+#include "Twofold/intern/PreparedChaiScriptBuilder.h"
 #include "Twofold/intern/LineProcessor.h"
 
 #include "Twofold/intern/QStringHelper.h"
 #include "Twofold/intern/QCharHelper.h"
 
-#include "Twofold/intern/Javascript/BraceCounter.h"
+#include "Twofold/intern/Script/BraceCounter.h"
 
 namespace Twofold {
 namespace intern {
 namespace Line {
 
 Call::Call(const MessageHandlerPtr &messageHandler,
-           PreparedJavascriptBuilder &builder)
+           PreparedChaiScriptBuilder &builder)
     : m_messageHandler(messageHandler), m_builder(builder) {}
 
-using BraceCounter = Twofold::intern::Javascript::BraceCounter;
+using BraceCounter = Twofold::intern::Script::BraceCounter;
 
 void Call::operator()(const FileLine &line) const {
     auto begin = line.firstNonSpace + 1;

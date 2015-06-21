@@ -29,7 +29,7 @@
 namespace Twofold {
 namespace intern {
 
-class PreparedJavascriptBuilder;
+class PreparedChaiScriptBuilder;
 struct LineCommand;
 
 namespace Command {
@@ -49,7 +49,7 @@ public:
 
     Include(const MessageHandlerPtr &messageHandler,
             const TextLoaderPtr &textLoader,
-            PreparedJavascriptBuilder &builder,
+            PreparedChaiScriptBuilder &builder,
             const ProcessIncludedTextFunction &processIncludeText);
 
     void operator() (const LineCommand& command);
@@ -57,7 +57,7 @@ public:
 private:
     const MessageHandlerPtr m_messageHandler;
     const TextLoaderPtr m_textLoader;
-    PreparedJavascriptBuilder &m_builder;
+    PreparedChaiScriptBuilder &m_builder;
     const ProcessIncludedTextFunction m_processIncludeText;
     Stack m_stack;
 };

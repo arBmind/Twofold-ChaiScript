@@ -24,22 +24,22 @@
 
 struct MessageCount
 {
-    MessageCount(int message = 0, int templateMessage = 0, int javaScriptMessage = 0)
+    MessageCount(int message = 0, int templateMessage = 0, int scriptMessage = 0)
         : message(message)
         , templateMessage(templateMessage)
-        , javaScriptMessage(javaScriptMessage)
+        , scriptMessage(scriptMessage)
     {}
 
     bool operator==(MessageCount &other) const
     {
         return message == other.message
                 && templateMessage == other.templateMessage
-                && javaScriptMessage == other.javaScriptMessage;
+                && scriptMessage == other.scriptMessage;
     }
 
     int message = 0;
     int templateMessage = 0;
-    int javaScriptMessage = 0;
+    int scriptMessage = 0;
 };
 Q_DECLARE_METATYPE(MessageCount)
 
@@ -56,9 +56,9 @@ public:
         count.templateMessage++;
     }
 
-    void javaScriptMessage(Type, const PositionStack &, const Text&) override
+    void scriptMessage(Type, const PositionStack &, const Text&) override
     {
-        count.javaScriptMessage++;
+        count.scriptMessage++;
     }
 
 public:

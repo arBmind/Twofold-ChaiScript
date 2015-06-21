@@ -25,7 +25,7 @@
 
 #include <QtTest>
 
-class TestJavaScript : public QObject
+class TestChaiScript : public QObject
 {
     Q_OBJECT
 
@@ -38,15 +38,15 @@ private Q_SLOTS:
 
 #define FAKE_TWOFOLD_NAME "testTemplate"
 
-void TestJavaScript::testInterpolation_data()
+void TestChaiScript::testInterpolation_data()
 {
     QTest::addColumn< QString >( "templateText" );
-    QTest::addColumn< QString >( "javaScriptText" );
+    QTest::addColumn< QString >( "scriptText" );
 
     const static QString newLine("_template.newLine();\n");
     const static QString s_output("_template.append(\"%1\", %2);\n");
     const static QString s_indentPart("_template.indentPart(\"%1\", %2);\n");
-    const static QString s_expression("_template.pushPartIndent(%2);_template.append(%1, %2);_template.popPartIndent();\n");
+    const static QString s_expression("_template.pushPartIndent(%2);_template.append((%1).to_string(), %2);_template.popPartIndent();\n");
 
     static auto output = [](QString text, int originIndex){ return s_output.arg(text).arg(originIndex); };
     static auto indentPart = [](QString text, int originIndex){ return s_indentPart.arg(text).arg(originIndex); };
@@ -70,10 +70,10 @@ void TestJavaScript::testInterpolation_data()
     QTest::newRow("nested expr") << "|#{'#{hello}'}" << indentPart("", 0) + expression("'#{hello}'", 1) + newLine;
 }
 
-void TestJavaScript::testInterpolation()
+void TestChaiScript::testInterpolation()
 {
     QFETCH( QString, templateText );
-    QFETCH( QString, javaScriptText );
+    QFETCH( QString, scriptText );
 
     using namespace Twofold;
 
@@ -86,12 +86,12 @@ void TestJavaScript::testInterpolation()
 
     QCOMPARE(messageHandler->count.message, 0);
     QCOMPARE(messageHandler->count.templateMessage, 0);
-    QCOMPARE(messageHandler->count.javaScriptMessage, 0);
+    QCOMPARE(messageHandler->count.scriptMessage, 0);
 
-    QCOMPARE(result.javascript, javaScriptText);
+    QCOMPARE(result.script, scriptText);
 }
 
-void TestJavaScript::testSourceMap_data()
+void TestChaiScript::testSourceMap_data()
 {
     QTest::addColumn< QString >( "templateText" );
     QTest::addColumn< QString >( "searchText" );
@@ -112,13 +112,13 @@ void TestJavaScript::testSourceMap_data()
 
     //                                              1         2
     //                                    123456789 012345678901
-    QTest::newRow("generated code 1") << "| simple \n|#{'hello'}" << "pend('hello" << 2 << 2;
+    QTest::newRow("generated code 1") << "| simple \n|#{'hello'}" << "pend(('hello" << 2 << 2;
     //                                             1
     //                                    12345678901
     QTest::newRow("generated code 2") << "|#{'hello'}" << ", 1);_template.pop" << 1 << 11;
 }
 
-void TestJavaScript::testSourceMap()
+void TestChaiScript::testSourceMap()
 {
     QFETCH(QString, templateText);
     QFETCH(QString, searchText);
@@ -131,11 +131,11 @@ void TestJavaScript::testSourceMap()
                                             std::make_shared<FakeTextLoader>(templateText));
     const PreparedTemplate result = preparedBuilder.build("testTemplate");
 
-    auto jsBegin = result.javascript.cbegin();
-    auto jsEnd = result.javascript.cend();
+    auto jsBegin = result.script.cbegin();
+    auto jsEnd = result.script.cend();
 
     auto it = std::search(jsBegin, jsEnd, searchText.cbegin(), searchText.cend());
-    QVERIFY(it!=jsEnd);
+    QVERIFY2(it!=jsEnd, result.script.toLatin1().data());
     auto lastNewLine = intern::find_last(jsBegin, it, QChar('\n'));
     if (*lastNewLine == '\n') lastNewLine++;
 
@@ -148,6 +148,6 @@ void TestJavaScript::testSourceMap()
     QCOMPARE(source.column, templateColumn);
 }
 
-QTEST_APPLESS_MAIN(TestJavaScript)
+QTEST_APPLESS_MAIN(TestChaiScript)
 
-#include "TestJavaScript.moc"
+#include "TestChaiScript.moc"

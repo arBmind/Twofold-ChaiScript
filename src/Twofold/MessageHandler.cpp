@@ -51,7 +51,7 @@ void MessageHandler::templateMessage(Type type,
     this->message(type, composed);
 }
 
-void MessageHandler::javaScriptMessage(Type type,
+void MessageHandler::scriptMessage(Type type,
                                        const PositionStack &positionStack,
                                        const Text &text)
 {

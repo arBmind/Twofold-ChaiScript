@@ -33,8 +33,8 @@ namespace Twofold {
 
 struct Target
 {
-    const SourceMapping sourceMap;
-    const QString text;
+    SourceMapping sourceMap;
+    QString text;
 };
 
 /**

@@ -18,13 +18,13 @@
  */
 #include "Interpolation.h"
 
-#include "Twofold/intern/PreparedJavascriptBuilder.h"
+#include "Twofold/intern/PreparedChaiScriptBuilder.h"
 #include "Twofold/intern/LineProcessor.h"
 
 #include "Twofold/intern/QStringHelper.h"
 #include "Twofold/intern/QCharHelper.h"
 
-#include "Twofold/intern/Javascript/BraceCounter.h"
+#include "Twofold/intern/Script/BraceCounter.h"
 
 #include <algorithm>
 
@@ -37,7 +37,7 @@ namespace Line {
 
 namespace {
 
-using BraceCounter = Twofold::intern::Javascript::BraceCounter;
+using BraceCounter = Twofold::intern::Script::BraceCounter;
 inline bool isHash(QChar chr) { return chr == HASH; }
 
 void reportError(const MessageHandlerPtr& messageHandler, const FileLine &line, const QString &message)
@@ -47,7 +47,7 @@ void reportError(const MessageHandlerPtr& messageHandler, const FileLine &line, 
 
 } // namespace
 
-Interpolation::Interpolation(const MessageHandlerPtr &messageHandler, PreparedJavascriptBuilder &builder)
+Interpolation::Interpolation(const MessageHandlerPtr &messageHandler, PreparedChaiScriptBuilder &builder)
     : m_messageHandler(messageHandler)
     , m_builder(builder)
 {
@@ -79,7 +79,7 @@ void Interpolation::operator()(const FileLine &line) const
             if (expressionEnd == line.end) {
                 reportError(m_messageHandler, line, "Missing close bracket!");
                 begin = line.end;
-                break; // terminate as invalid javascript
+                break; // terminate as invalid chaiscript
             }
             m_builder << OriginScriptExpression {{line, TextSpan{expressionBegin, expressionEnd}}};
             begin = end = expressionEnd + 1; // skip closing brackets

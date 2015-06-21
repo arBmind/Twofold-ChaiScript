@@ -34,10 +34,10 @@ ChaiScriptTargetBuilderApi::ChaiScriptTargetBuilderApi(const FileLineColumnPosit
     : m_originPositions(originPositions)
 {}
 
-void ChaiScriptTargetBuilderApi::append(const QString &text, int originIndex)
+void ChaiScriptTargetBuilderApi::append(const std::string &text, int originIndex)
 {
-    if (!text.isEmpty()) {
-        m_sourceMapBuilder << OriginText { m_originPositions[originIndex], text, Interpolation::None };
+    if (!text.empty()) {
+        m_sourceMapBuilder << OriginText { m_originPositions[originIndex], QString::fromStdString(text), Interpolation::None };
     }
 }
 
@@ -46,7 +46,12 @@ void ChaiScriptTargetBuilderApi::newLine()
     m_sourceMapBuilder << NewLine();
 }
 
-void ChaiScriptTargetBuilderApi::pushIndentation(const QString &indent, int originIndex)
+void ChaiScriptTargetBuilderApi::pushIndentation(const std::string &_indent, int originIndex)
+{
+    _pushIndentation(QString::fromStdString(_indent), originIndex);
+}
+
+void ChaiScriptTargetBuilderApi::_pushIndentation(const QString &indent, int originIndex)
 {
     QString fullIndent = indent;
     if (!m_indentationStack.empty()) fullIndent.prepend(m_indentationStack.back().second);
@@ -64,8 +69,9 @@ void ChaiScriptTargetBuilderApi::popIndentation()
     m_sourceMapBuilder.setIndentation(newIndent);
 }
 
-void ChaiScriptTargetBuilderApi::indentPart(const QString &indent, int originIndex)
+void ChaiScriptTargetBuilderApi::indentPart(const std::string &_indent, int originIndex)
 {
+    QString indent = QString::fromStdString(_indent);
     if (m_sourceMapBuilder.isBlankLine()) {
         m_partIndent = indent;
     }
@@ -74,7 +80,7 @@ void ChaiScriptTargetBuilderApi::indentPart(const QString &indent, int originInd
 
 void ChaiScriptTargetBuilderApi::pushPartIndent(int originIndex)
 {
-    pushIndentation(m_partIndent, originIndex);
+    _pushIndentation(m_partIndent, originIndex);
 }
 
 void ChaiScriptTargetBuilderApi::popPartIndent()

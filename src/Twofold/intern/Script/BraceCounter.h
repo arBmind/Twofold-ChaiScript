@@ -22,7 +22,7 @@
 
 namespace Twofold {
 namespace intern {
-namespace Javascript {
+namespace Script {
 
 class BraceCounter
 {
@@ -45,6 +45,6 @@ public:
     static It findExpressionEnd(It begin, It end);
 };
 
-} // namespace Javascript
+} // namespace Script
 } // namespace intern
 } // namespace Twofold
