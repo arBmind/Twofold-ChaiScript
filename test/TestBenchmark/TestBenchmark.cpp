@@ -35,26 +35,34 @@ public:
 
 private Q_SLOTS:
     void prepare();
+    void execute_data();
     void execute();
+    void executeCPP_data();
     void executeCPP();
 
 private:
+    Twofold::Engine engine;
     Twofold::Engine::Context context;
+    Twofold::PreparedTemplate prepared;
+    Twofold::Target target;
 };
 
 #include "TestBenchmark.moc"
+
+#define TEMPLATE_REPETITION 1000
 
 class FakeTextLoader : public Twofold::TextLoader
 {
 public:
     Result load(const QString &name) const
     {
-        static const QString templateText1 = R"EXAMPLE(
-for(var i = 0; i <= 10000; ++i) {
+        static const QString templateText1 = QString::fromLatin1(R"EXAMPLE(
+for(var i = 0; i <= %1; ++i) {
     | Das ist ein kurzer Text! #{i}
     # include "lib.twofold"
 }
-)EXAMPLE";
+)EXAMPLE"
+        ).arg(TEMPLATE_REPETITION);
 
         static const QString templateText2 = R"EXAMPLE(
 |Line 1 included
@@ -68,6 +76,11 @@ for(var i = 0; i <= 10000; ++i) {
 };
 
 TestBenchmark::TestBenchmark()
+    : engine(std::make_shared<Twofold::MessageHandler>(),
+             std::make_shared<FakeTextLoader>())
+#if defined(_MSC_VER) && _MSC_VER < 1900
+    , prepared({})
+#endif
 {
     QObject* pType = new QObject();
     pType->setProperty( "isArray", true );
@@ -85,23 +98,19 @@ TestBenchmark::TestBenchmark()
 
 void TestBenchmark::prepare()
 {
-    using namespace Twofold;
-    Engine engine(std::make_shared<MessageHandler>(),
-                  std::make_shared<FakeTextLoader>());
     QBENCHMARK {
         engine.prepare("TextTemplate.twofold");
     }
 }
 
+void TestBenchmark::execute_data()
+{
+    prepared = engine.prepare("TextTemplate.twofold");
+    // qDebug() << prepared.script;
+}
+
 void TestBenchmark::execute()
 {
-    using namespace Twofold;
-    Engine engine(std::make_shared<MessageHandler>(),
-                  std::make_shared<FakeTextLoader>());
-    PreparedTemplate prepared = engine.prepare("TextTemplate.twofold");
-    //    qDebug() << prepared.script;
-
-    Target target = {SourceMapping({{}, {}}), QString()};
     QBENCHMARK {
         target = engine.exec(prepared, context);
     }
@@ -109,18 +118,18 @@ void TestBenchmark::execute()
 
 #include "Twofold/intern/ChaiScriptTargetBuilderApi.h"
 
+void TestBenchmark::executeCPP_data()
+{
+    prepared = engine.prepare("TextTemplate.twofold");
+}
+
 void TestBenchmark::executeCPP()
 {
     using namespace Twofold;
-    Engine engine(std::make_shared<MessageHandler>(),
-                  std::make_shared<FakeTextLoader>());
-    PreparedTemplate prepared = engine.prepare("TextTemplate.twofold");
-
-    Target target = {SourceMapping({{}, {}}), QString()};
-
+    using namespace Twofold::intern;
     QBENCHMARK {
-        intern::ChaiScriptTargetBuilderApi _template(prepared.originPositions);
-        for(auto i = 0; i <= 10000; ++i) {
+        auto _template = ChaiScriptTargetBuilderApi{prepared.originPositions};
+        for(auto i = 0; i <= TEMPLATE_REPETITION; ++i) {
             _template.indentPart(" ", 0);
             _template.append("Das ist ein kurzer Text! ", 1);
             _template.pushPartIndent(2);_template.append(std::to_string(i), 2);_template.popPartIndent();

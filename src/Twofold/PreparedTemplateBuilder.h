@@ -33,6 +33,12 @@ struct PreparedTemplate
     const QString script;
     const SourceMapping sourceMap;
     const FileLineColumnPositionList originPositions;
+
+    inline PreparedTemplate& operator=(const PreparedTemplate& src) {
+        this->~PreparedTemplate();
+        new(this) PreparedTemplate(src);
+        return *this;
+    }
 };
 
 /**

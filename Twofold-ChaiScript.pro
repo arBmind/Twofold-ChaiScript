@@ -33,4 +33,6 @@ OTHER_FILES += \
     CHANGES \
     LICENSE \
     NOTICE \
-    README.md
+    README.md \
+    .travis.yml \
+    .gitmodules
