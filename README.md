@@ -15,7 +15,7 @@ This is the second C++ implementation of Twofold.
 * more difficult than regular html. It requires tight controls about every whitespace and tools for indentation.
 * often requires more control structures in order to access models or AST-like structures.
 
-We faced these challanges and Twofold is the result.
+We faced these challenges and Twofold is the result.
 
 ## Features
 
