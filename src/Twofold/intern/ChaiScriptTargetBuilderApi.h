@@ -24,6 +24,10 @@
 #include <QObject>
 #include <vector>
 
+namespace chaiscript {
+class Module;
+}
+
 namespace Twofold {
 namespace intern {
 
@@ -39,6 +43,8 @@ public:
     ~ChaiScriptTargetBuilderApi() {}
 
     inline SourceMapText build() const { return m_sourceMapBuilder.build(); }
+
+    static void add_class(chaiscript::Module &module);
 
 public:
     void append(const std::string &text, int originIndex);

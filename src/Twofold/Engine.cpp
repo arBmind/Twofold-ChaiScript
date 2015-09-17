@@ -207,19 +207,7 @@ def to_string(void) {
     void defineTemplateApi(ChaiScriptTargetBuilderApi &templateApi)
     {
         auto module = std::make_shared<chaiscript::Module>();
-
-        chaiscript::utility::add_class<ChaiScriptTargetBuilderApi>(*module,
-                                                                   "TwofoldTemplate", {}, {
-                                                                       { chaiscript::fun(&ChaiScriptTargetBuilderApi::append), "append" },
-                                                                       { chaiscript::fun(&ChaiScriptTargetBuilderApi::newLine), "newLine" },
-                                                                       { chaiscript::fun(&ChaiScriptTargetBuilderApi::pushIndentation), "pushIndentation" },
-                                                                       { chaiscript::fun(&ChaiScriptTargetBuilderApi::popIndentation), "popIndentation" },
-                                                                       { chaiscript::fun(&ChaiScriptTargetBuilderApi::indentPart), "indentPart" },
-                                                                       { chaiscript::fun(&ChaiScriptTargetBuilderApi::pushPartIndent), "pushPartIndent" },
-                                                                       { chaiscript::fun(&ChaiScriptTargetBuilderApi::popPartIndent), "popPartIndent" },
-                                                                   }
-                                                                   );
-
+        ChaiScriptTargetBuilderApi::add_class(*module);
         m_chai.add(module);
         m_chai.add_global(chaiscript::var(&templateApi), "_template");
     }

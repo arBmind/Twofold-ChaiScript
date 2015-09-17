@@ -18,6 +18,8 @@
  */
 #include "ChaiScriptTargetBuilderApi.h"
 
+#include <chaiscript/utility/utility.hpp>
+
 namespace Twofold {
 namespace intern {
 
@@ -33,6 +35,24 @@ std::pair<T,S> make_pair(const T& t, const S& s) {
 ChaiScriptTargetBuilderApi::ChaiScriptTargetBuilderApi(const FileLineColumnPositionList &originPositions)
     : m_originPositions(originPositions)
 {}
+
+void ChaiScriptTargetBuilderApi::add_class(chaiscript::Module &module)
+{
+    chaiscript::utility::add_class<ChaiScriptTargetBuilderApi>(
+                module,
+                "TwofoldTemplate",
+                {},
+                {
+                   { chaiscript::fun(&append), "append" },
+                   { chaiscript::fun(&newLine), "newLine" },
+                   { chaiscript::fun(&pushIndentation), "pushIndentation" },
+                   { chaiscript::fun(&popIndentation), "popIndentation" },
+                   { chaiscript::fun(&indentPart), "indentPart" },
+                   { chaiscript::fun(&pushPartIndent), "pushPartIndent" },
+                   { chaiscript::fun(&popPartIndent), "popPartIndent" },
+               }
+               );
+}
 
 void ChaiScriptTargetBuilderApi::append(const std::string &text, int originIndex)
 {
