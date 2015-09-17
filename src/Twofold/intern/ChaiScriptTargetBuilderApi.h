@@ -40,7 +40,6 @@ class ChaiScriptTargetBuilderApi
 {
 public:
     ChaiScriptTargetBuilderApi(const FileLineColumnPositionList &originPositions);
-    ~ChaiScriptTargetBuilderApi() {}
 
     inline SourceMapText build() const { return m_sourceMapBuilder.build(); }
 
