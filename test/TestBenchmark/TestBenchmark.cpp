@@ -49,7 +49,7 @@ private:
 
 #include "TestBenchmark.moc"
 
-#define TEMPLATE_REPETITION 1000
+#define TEMPLATE_REPETITION 10000
 
 class FakeTextLoader : public Twofold::TextLoader
 {
@@ -66,7 +66,7 @@ for(var i = 0; i <= %1; ++i) {
 
         static const QString templateText2 = R"EXAMPLE(
 |Line 1 included
-|Line 2 incldued
+|Line 2 included
 )EXAMPLE";
 
         return (name != "lib.twofold")
@@ -128,8 +128,8 @@ void TestBenchmark::executeCPP()
     using namespace Twofold;
     using namespace Twofold::intern;
     QBENCHMARK {
-        auto _template = ChaiScriptTargetBuilderApi{prepared.originPositions};
-        for(auto i = 0; i <= TEMPLATE_REPETITION; ++i) {
+        ChaiScriptTargetBuilderApi _template(prepared.originPositions);
+        for(auto i = 0; i <= TEMPLATE_REPETITION*10; ++i) {
             _template.indentPart(" ", 0);
             _template.append("Das ist ein kurzer Text! ", 1);
             _template.pushPartIndent(2);_template.append(std::to_string(i), 2);_template.popPartIndent();
