@@ -38,20 +38,21 @@ ChaiScriptTargetBuilderApi::ChaiScriptTargetBuilderApi(const FileLineColumnPosit
 
 void ChaiScriptTargetBuilderApi::add_class(chaiscript::Module &module)
 {
-    chaiscript::utility::add_class<ChaiScriptTargetBuilderApi>(
+    using Api = ChaiScriptTargetBuilderApi;
+    using namespace chaiscript;
+    utility::add_class<Api>(
                 module,
                 "TwofoldTemplate",
                 {},
                 {
-                   { chaiscript::fun(&append), "append" },
-                   { chaiscript::fun(&newLine), "newLine" },
-                   { chaiscript::fun(&pushIndentation), "pushIndentation" },
-                   { chaiscript::fun(&popIndentation), "popIndentation" },
-                   { chaiscript::fun(&indentPart), "indentPart" },
-                   { chaiscript::fun(&pushPartIndent), "pushPartIndent" },
-                   { chaiscript::fun(&popPartIndent), "popPartIndent" },
-               }
-               );
+                   { fun(&Api::append), "append" },
+                   { fun(&Api::newLine), "newLine" },
+                   { fun(&Api::pushIndentation), "pushIndentation" },
+                   { fun(&Api::popIndentation), "popIndentation" },
+                   { fun(&Api::indentPart), "indentPart" },
+                   { fun(&Api::pushPartIndent), "pushPartIndent" },
+                   { fun(&Api::popPartIndent), "popPartIndent" },
+               });
 }
 
 void ChaiScriptTargetBuilderApi::append(const std::string &text, int originIndex)
